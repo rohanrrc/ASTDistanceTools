@@ -52,7 +52,7 @@ public class TreeEditDistanceTest {
         Path directory = Paths.get("resources/python/test_subset/");
         double[][] matrix = new TreeEditDistanceMatrix(directory, "python").compute();
         for (int i = 0; i < matrix.length; i++){
-            assertArrayEquals(0, matrix[i][i], 0.001);
+            assertEquals(0, matrix[i][i], 0.001);
         }
     }
 
