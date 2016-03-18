@@ -12,21 +12,21 @@ import static org.junit.Assert.*;
 
 public class TreeEditDistanceTest {
     @Test
-    public void TreeEditDistanceBetweenIdenticalASTsShouldBeZero() throws Exception {
+    public void treeEditDistanceBetweenIdenticalASTsShouldBeZero() throws Exception {
         String ast = "resources/python/test_subset/ast/1.ast";
         LblTree lt = LblTree.fromString((new BufferedReader(new FileReader(ast))).readLine());
         assertEquals(0, new EditDist(true).nonNormalizedTreeDist(lt,lt), 0.001);
     }
 
     @Test
-    public void LengthOfTreeEditArrayShouldEqualNumberOfFilesInDirectoryMinusOne() throws Exception {
+    public void lengthOfTreeEditArrayShouldEqualNumberOfFilesInDirectoryMinusOne() throws Exception {
         Path home_dir = Paths.get("resources/python/test_subset/");
         int num_files = new File(home_dir.resolve("ast").toUri()).list().length;
         assertEquals(num_files - 1, new TreeEditDistanceArray(home_dir, "python").compute().length);
     }
 
     @Test
-    public void TreeEditDistanceArrayOfTestSubsetShouldEqualExpectedValues() throws Exception {
+    public void treeEditDistanceArrayOfTestSubsetShouldEqualExpectedValues() throws Exception {
         Path directory = Paths.get("resources/python/test_subset/");
         double[] arr = new TreeEditDistanceArray(directory, "python").compute();
         double[] expected = {76, 73, 65, 70};
@@ -34,7 +34,7 @@ public class TreeEditDistanceTest {
     }
 
     @Test
-    public void TreeEditDistanceMatrixOfTestSubsetShouldEqualExpectedValues() throws Exception {
+    public void treeEditDistanceMatrixOfTestSubsetShouldEqualExpectedValues() throws Exception {
         Path directory = Paths.get("resources/python/test_subset/");
         double[][] matrix = new TreeEditDistanceMatrix(directory, "python").compute();
         double[][] expected = {{0, 49, 86, 34, 76},
@@ -44,6 +44,15 @@ public class TreeEditDistanceTest {
                 {76, 73, 65, 70, 0}};
         for (int i = 0; i < matrix.length; i++){
             assertArrayEquals(expected[i], matrix[i], 0.001);
+        }
+    }
+
+    @Test
+    public void entriesAlongDiagonalOfDistanceMatrixShouldBeZero() throws Exception {
+        Path directory = Paths.get("resources/python/test_subset/");
+        double[][] matrix = new TreeEditDistanceMatrix(directory, "python").compute();
+        for (int i = 0; i < matrix.length; i++){
+            assertArrayEquals(0, matrix[i][i], 0.001);
         }
     }
 
